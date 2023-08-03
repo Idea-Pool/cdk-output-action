@@ -1,6 +1,54 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 657:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getConfig = void 0;
+const core = __importStar(__nccwpck_require__(186));
+function getConfig() {
+    return {
+        outputPath: core.getInput('output_path'),
+        artifactName: core.getInput('artifact_name'),
+        keys: core.getInput('keys'),
+        saveToRepoEnv: core.getBooleanInput('save_to_repo_env'),
+        saveToRepoSecrets: core.getBooleanInput('save_to_repo_secrets'),
+        outputJobSummary: core.getBooleanInput('output_job_summary'),
+        appendStackName: core.getBooleanInput('append_stack_name'),
+        trimUUID: core.getBooleanInput('trim_uuid')
+    };
+}
+exports.getConfig = getConfig;
+
+
+/***/ }),
+
 /***/ 109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -40,37 +88,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
+const input_1 = __nccwpck_require__(657);
+const parse_1 = __nccwpck_require__(223);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // 0. Get inputs
-            const outputPath = core.getInput('output_path');
-            core.debug(`output_path: ${outputPath}`);
-            const artifactName = core.getInput('artifact_name');
-            core.debug(`artifact_name: ${artifactName}`);
-            const saveToRepoEnv = core.getBooleanInput('save_to_repo_env');
-            core.debug(`save_to_repo_env: ${saveToRepoEnv}`);
-            const saveToRepoSecrets = core.getBooleanInput('save_to_repo_secrets');
-            core.debug(`save_to_repo_secrets: ${saveToRepoSecrets}`);
-            const outputJobSummary = core.getBooleanInput('output_job_summary');
-            core.debug(`output_job_summary: ${outputJobSummary}`);
-            const saveAsArtifact = core.getBooleanInput('save_as_artifact');
-            core.debug(`save_as_artifact: ${saveAsArtifact}`);
-            const keys = core.getInput('keys');
-            core.debug(`keys: ${keys}`);
-            // 1. Load file
-            // 2. Parse output
-            if (saveToRepoEnv) {
+            const config = (0, input_1.getConfig)();
+            // 1. Load and parse output
+            const outputs = (0, parse_1.parseCDKOutput)(config);
+            if (config.saveToRepoEnv) {
                 // 3. Saving to repo environment variables
             }
-            if (saveToRepoSecrets) {
+            if (config.saveToRepoSecrets) {
                 // 4. Saving to repo secrets
             }
-            if (saveAsArtifact) {
+            if (config.saveAsArtifact) {
                 // 5. Saving as artifact
             }
-            if (outputJobSummary) {
+            if (config.outputJobSummary) {
                 // 6. Build job summary
+                core.summary
+                    .addHeading('CDK Ouput')
+                    .addTable([
+                    [
+                        { data: 'Key', header: true },
+                        { data: 'Value', header: true }
+                    ],
+                    ...Object.keys(outputs).map(key => [key, outputs[key]])
+                ])
+                    .write();
             }
         }
         catch (error) {
@@ -80,6 +127,70 @@ function run() {
     });
 }
 run();
+
+
+/***/ }),
+
+/***/ 223:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseCDKOutput = void 0;
+const fs = __importStar(__nccwpck_require__(147));
+function buildKeyFilter(keys) {
+    if (!keys || keys.toLowerCase() === 'all') {
+        return () => true;
+    }
+    const keyRx = new RegExp(keys.replace(/,/g, '|'), 'ig');
+    return (key) => keyRx.test(key);
+}
+function parseCDKOutput(options) {
+    if (!fs.existsSync(options.outputPath)) {
+        throw new Error(`File does not exist: ${options.outputPath}!`);
+    }
+    const stackOutput = JSON.parse(fs.readFileSync(options.outputPath, 'utf-8'));
+    const stackName = Object.keys(stackOutput)[0];
+    const filter = buildKeyFilter(options.keys);
+    const outputs = {};
+    for (const outputKey in stackOutput[stackName]) {
+        const absoluteKey = options.appendStackName
+            ? `${stackName}${outputKey}`
+            : outputKey;
+        const finalKey = options.trimUUID
+            ? absoluteKey.replace(/[0-9a-f]+$/i, '')
+            : absoluteKey;
+        if (filter(finalKey)) {
+            outputs[finalKey] = stackOutput[stackName][outputKey];
+        }
+    }
+    return outputs;
+}
+exports.parseCDKOutput = parseCDKOutput;
 
 
 /***/ }),

@@ -22,6 +22,12 @@ inputs:
     required: true
     description: "The name of the uploaded artifact."
     default: "cdk-outputs"
+  append_stack_name:
+    description: "Whether the stack name should be added to the keys (true or false, defaults to false)."
+    default: "false"
+  trim_uuid:
+    description: "Whether the UUID should be trimmed from the output keys (true or false, defaults to true)."
+    default: "true"
   keys:
     description: "An optional list of keys of outputs to process (defaults to all)"
     default: "all"
