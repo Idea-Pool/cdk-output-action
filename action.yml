@@ -1,11 +1,36 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: "CDK Output Parser"
+description: "This action can parse and process the output JSON of the CDK Deploy command and save the outputs to various places."
+author: "idea-pool"
 inputs:
-  milliseconds: # change this
+  output_path:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: "The relative path to the CDK Output JSON file."
+    default: "./cdk-outputs.json"
+  save_to_repo_env:
+    description: "Whether all or the selected outputs should be saved as repository environment variables (true or false, defaults to true)."
+    default: "true"
+  save_to_repo_secrets:
+    description: "Whether all or the selected outputs should be saved as repository secrets (true or false, defaults to false)."
+    default: "false"
+  output_job_summary:
+    description: "Whether all or the selected outputs should be displayed in the job summary (true or false, defaults to true)."
+    default: "true"
+  save_as_artifact:
+    description: "Whether all or the selected outputs should be uploaded as artifacts (true or false, defaults to false)."
+    default: "false"
+  artifact_name:
+    required: true
+    description: "The name of the uploaded artifact."
+    default: "cdk-outputs"
+  append_stack_name:
+    description: "Whether the stack name should be added to the keys (true or false, defaults to false)."
+    default: "false"
+  trim_uuid:
+    description: "Whether the UUID should be trimmed from the output keys (true or false, defaults to true)."
+    default: "true"
+  keys:
+    description: "An optional list of keys of outputs to process (defaults to all)"
+    default: "all"
 runs:
   using: 'node16'
   main: 'dist/index.js'

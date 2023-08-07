@@ -1,0 +1,9 @@
+{
+    "StackName": {
+        "FirstKey": "1.2.3.4",
+        "SecondKey": "ideapool.community",
+        "KeyWithUUID01234567": "arn::::::",
+        "AnotherKey89ABCDEF": "arn::::::",
+        "Ignored": "Ignored"
+    }
+}

@@ -18,7 +18,28 @@ jobs:
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Preparing test data
+        run: |
+          sed 's/StackName/TestStack/g' ./__tests__/cdk-outputs.json > ./tmp-cdk-outputs.json
+      - name: Executing action
+        uses: ./
         with:
-          milliseconds: 1000
+          output_path: tmp-cdk-outputs.json
+          save_to_repo_env: true
+          save_to_repo_secrets: true
+          save_as_artifact: true
+          artifact_name: tmp-cdk-outputs
+          append_stack_name: true
+          keys: Key
+      - name: Testing artifacts
+        run: ""
+      - name: Testing summary
+        run: ""
+      - name: Testing environment variables
+        run: ""
+      - name: Testing secrets
+        run: ""
+      - name: Testing keys
+        run: ""
